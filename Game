@@ -1,0 +1,157 @@
+import java.lang.reflect.Array;
+import java.util.Scanner;
+import java.util.Random;
+
+// Random seed 13 is used for testing
+// player win condition     5 3 1 8 7
+// computer win condition   2 9 3 7
+// draw condition           5 6 1 8 7
+public class MyTicTacToeDriver {
+    public static void main(String[] args) {
+        Random randomObj = new Random(); // Keep the line must use this random object
+        Scanner scannerObj = new Scanner(System.in); // Keep the line must use this scanner object
+        char[] boardArray = {'1', '2', '3',
+                '4', '5', '6',
+                '7', '8', '9'}; // Keep the array and use it
+
+        System.out.println("Programming Fundamentals");
+        System.out.println("NAME: Elizabeth Adelman");    // replace with your name
+        System.out.println("PROGRAMMING ASSIGNMENT 2");
+        System.out.println("Welcome to Tic Tac Toe game!");
+
+        int winner = 0;
+        int emptySpaces = 9;
+
+        // 0 = Not a winner, 1 = User has won, 2 = Computer has won
+        while (winner == 0) {
+
+            // Write Tic Tac Toe game here
+            displayBoard(boardArray); // Example use of displayBoard method
+
+            // Uncomment to use
+
+            userPlacementInput(boardArray, scannerObj); // Example use of userPlacementInput method
+            emptySpaces = emptySpaces -1;
+
+            displayBoard(boardArray);
+            if (winCheck(boardArray) == true) {
+                winner = 1;
+                break;
+            }
+            if (emptySpaces == 0) {
+                winner = 3;
+                break;
+            }
+            //Uncomment to use
+            computerRNGPlacement(boardArray, randomObj); // Example use of computerRNGPlacement method
+            emptySpaces = emptySpaces -1;
+
+
+            if (winCheck(boardArray) == true) {
+                winner = 2;
+                break;
+            }
+            if (emptySpaces == 0) {
+                winner = 3;
+                break;
+            }
+                // Any other functions are up to you to create and use
+
+                // When Printing the final message you must use the following format that must be in the last 128 character output
+                // "WIN", for player win condition has to be a part of the 128 last characters of the output
+                // "LOST", for player lost condition has to be a part of the 128 last characters of the output
+                // "DRAW", for draw condition has to be a part of the 128 last characters of the output
+
+            }
+        displayBoard(boardArray);
+        if (winner == 1) {
+            System.out.println("Congrats you WON!");
+
+        }
+        if (winner == 2) {
+            System.out.println("Not good enought, you LOST!");
+        }
+
+        if (winner == 3) {
+            System.out.println("TIE!");
+        }
+
+        }
+
+    public static void displayBoard(char[] boardArray) {
+        System.out.println("Board:");
+        for (int i = 0; i < boardArray.length; i++) {
+            if (i % 3 == 0 && i != 0) {
+                System.out.println();
+            }
+            System.out.print(boardArray[i] + " ");
+        }
+        System.out.println("\n");
+    }
+
+    public static boolean winCheck(char[] boardArray) {
+
+        // Code a boolean function that checks if the boardArray is a win for either player
+        // Input is a boardArray
+        // Output is a true/false value
+        // e.g. if boardArray is {'X', 'X', 'X', '4', '5', '6', '7', '8', '9'} then return true
+        // Check rows
+        for (int i = 0; i < 9; i += 3) {
+            if (boardArray[i] == boardArray[i + 1] && boardArray[i + 1] == boardArray[i + 2]) {
+                return true;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if (boardArray[i] == boardArray[i + 3] && boardArray[i + 3] == boardArray[i + 6]) {
+                return true;
+            }
+        }
+        if ((boardArray[0] == boardArray[4] && boardArray[4] == boardArray[8]) ||
+                (boardArray[2] == boardArray[4] && boardArray[4] == boardArray[6])) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public static void userPlacementInput(char[] boardArray, Scanner scanner) {
+        // player win condition     5 3 1 8 7
+        // computer win condition   2 9 3 7
+        // draw condition           5 6 1 8 7
+        // Code a function that asks the user for a position to place their X
+        // Scanner needs to be passed in as a parameter to this function dont create a scanner each time
+        boolean checker = false;
+        while (checker != true) {
+            System.out.print("Where would you like to place an X? ");
+            int userinput = scanner.nextInt() - 1;
+            if ((char) Array.get(boardArray, userinput) != 'x' && (char) Array.get(boardArray, userinput) != 'O') {
+                Array.set(boardArray, userinput, 'x');
+                checker = true;
+            } else {
+                System.out.print("That space already had an " + Array.get(boardArray, userinput) + ", try again!");
+            }
+        }
+    }
+
+    public static void computerRNGPlacement(char[] boardArray, Random random) {
+        // Code a function that places an O in a random position on the board
+        // Random needs to be passed in as a parameter to this function dont create a random each time
+        // random.nextInt(N) you can use the object to generate a random number between 0 and N-1 as it is
+        boolean checker = false;
+        int counter = 0;
+
+        while (checker != true) {
+            int computerinput = random.nextInt(9);
+            if ((char) Array.get(boardArray, computerinput) != 'x' && (char) Array.get(boardArray, computerinput) != 'O') {
+                Array.set(boardArray, computerinput, 'O');
+                checker = true;
+            } else {
+                counter = counter +1;
+                if (counter > 1000) {
+                    break;
+                }
+                // no need to return the boardArray as it is passed by reference (memory address)
+            }
+        }
+    }
+}
